@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script>
+			$(function() {
+				$(".realDB").click(function () {
+					$("input[name='loc[]']").removeAttr('disabled');
+				});
+				$(".fakeDB").click(function () {
+					$("input[name='loc[]']").attr('disabled','disabled');
+					$("input[name='loc[]']").removeAttr('checked');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form action="db_select_records.php" method="post">
+			<h2>Leave filter fields blank to select all records</h2>
+			<p style="font-weight:bold;">Select records from real or fake data set?</p>
+			<input type="radio" name="data" value="real" checked="checked" class="realDB">Real
+			<input type="radio" name="data" value="fake" class="fakeDB">Fake
+			<p style="font-weight:bold;">Begin Date:</p>
+			<input type="date" name="beginDate"> <em>If your browser doesn't support the date picker you can type a date (format YYYY-MM-DD)</em>
+			<p style="font-weight:bold;">End Date:</p>
+			<input type="date" name="endDate"> <em>If your browser doesn't support the date picker you can type a date (format YYYY-MM-DD)</em>
+			<p style="font-weight:bold;">Begin Time:</p>
+			<input type="time" name="beginTime"> <em>24-hour time, format HHMM (e.g. 1430 = 2:30pm, 0245 = 2:45am)</em>
+			<p style="font-weight:bold;">End Time:</p>
+			<input type="time" name="endTime"> <em>24-hour time, format HHMM (e.g. 1430 = 2:30pm, 0245 = 2:45am)</em>
+			<p style="font-weight:bold;">Incident Type:</p>
+			<span><input type="checkbox" name="type[]" value="'AGGRAVATED ASSAULT'">Aggravated Assault</span>
+			<span><input type="checkbox" name="type[]" value="'BURGLARY'">Burglary</span>
+			<span><input type="checkbox" name="type[]" value="'MURDER / NON-NEGLIGENT MANSLAUGHTER'">Murder / Non-Negligent Manslaughter</span>
+			<span><input type="checkbox" name="type[]" value="'NEGLIGENT MANSLAUGHTER'">Negligent Manslaughter</span>
+			<span><input type="checkbox" name="type[]" value="'MOTOR VEHICLE THEFT'">Motor Vehicle Theft</span>
+			<span><input type="checkbox" name="type[]" value="'ROBBERY'">Robbery</span>
+			<span><input type="checkbox" name="type[]" value="'SEX OFFENSE - NON-FORCIBLE'">Sex Offense - Non-Forcible</span>
+			<span><input type="checkbox" name="type[]" value="'SEX OFFENSE - FORCIBLE'">Sex Offense - Forcible</span>
+			<span><input type="checkbox" name="type[]" value="'LIQUOR LAW VIOLATIONS'">Liquor Law Violations</span>
+			<span><input type="checkbox" name="type[]" value="'DRUG ABUSE VIOLATIONS'">Drug Abuse Violations</span>
+			<span><input type="checkbox" name="type[]" value="'WEAPON VIOLATIONS'">Weapon Violations</span>
+			<span><input type="checkbox" name="type[]" value="'THEFT'">Theft</span>
+			<span><input type="checkbox" name="type[]" value="'ATTEMPTED CRIME'">Attempted Crime</span>
+			<span><input type="checkbox" name="type[]" value="'VANDALISM'">Vandalism</span>
+			<span><input type="checkbox" name="type[]" value="'UNKNOWN'">Unknown</span>
+			<p style="font-weight:bold;">Incident Location (will be disabled if querying fake table):</p>
+			<span><input type='checkbox' name='loc[]' value="'ANDERSON HALL'">Anderson Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'ANDERSON/LANGDON'">Anderson/Langdon</span>
+			<span><input type='checkbox' name='loc[]' value="'BAKER STADIUM'">Baker Stadium</span>
+			<span><input type='checkbox' name='loc[]' value="'BAKER STATIUM/ FIELD'">Baker Statium/ Field</span>
+			<span><input type='checkbox' name='loc[]' value="'BASEBALL FIELD'">Baseball Field</span>
+			<span><input type='checkbox' name='loc[]' value="'BOILER'">Boiler</span>
+			<span><input type='checkbox' name='loc[]' value="'CERAMICS'">Ceramics</span>
+			<span><input type='checkbox' name='loc[]' value="'COLLINS MEMORIAL LIBRARY'">Collins Memorial Library</span>
+			<span><input type='checkbox' name='loc[]' value="'COMMUNICATION HOUSE'">Communication House</span>
+			<span><input type='checkbox' name='loc[]' value="'COMMUNITY INVOLVEMENT AND ACTION CENTER (CIAC) HOUSE'">Community Involvement And Action Center (Ciac) House</span>
+			<span><input type='checkbox' name='loc[]' value="'CONSTRUCTION SITE'">Construction Site</span>
+			<span><input type='checkbox' name='loc[]' value="'COPY SERVICES'">Copy Services</span>
+			<span><input type='checkbox' name='loc[]' value="'DIVERSIONS CAFE'">Diversions Cafe</span>
+			<span><input type='checkbox' name='loc[]' value="'DIVERSITY HOUSE'">Diversity House</span>
+			<span><input type='checkbox' name='loc[]' value="'EAST FIELD'">East Field</span>
+			<span><input type='checkbox' name='loc[]' value="'EXPEDITIONARY'">Expeditionary</span>
+			<span><input type='checkbox' name='loc[]' value="'FACILIT LOT'">Facilit Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'FACILITIES SERVICES'">Facilities Services</span>
+			<span><input type='checkbox' name='loc[]' value="'FACILITY SERVICES'">Facility Services</span>
+			<span><input type='checkbox' name='loc[]' value="'FH LOT'">Fh Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'FIELDHOUSE'">Fieldhouse</span>
+			<span><input type='checkbox' name='loc[]' value="'FIELDS/WOODS'">Fields/Woods</span>
+			<span><input type='checkbox' name='loc[]' value="'HARNED'">Harned</span>
+			<span><input type='checkbox' name='loc[]' value="'HARNED HALL'">Harned Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'HARRINGTON'">Harrington</span>
+			<span><input type='checkbox' name='loc[]' value="'HARRINGTON HALL'">Harrington Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'HIGHWAY/ROAD/ALLEY'">Highway/Road/Alley</span>
+			<span><input type='checkbox' name='loc[]' value="'HLTH SCI LOT'">Hlth Sci Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'HOWARTH'">Howarth</span>
+			<span><input type='checkbox' name='loc[]' value="'HOWARTH HALL'">Howarth Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'HUMAN RESOURCES'">Human Resources</span>
+			<span><input type='checkbox' name='loc[]' value="'JONES'">Jones</span>
+			<span><input type='checkbox' name='loc[]' value="'JONES CIRCLE'">Jones Circle</span>
+			<span><input type='checkbox' name='loc[]' value="'JONES HALL'">Jones Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'KARLEN QUAD'">Karlen Quad</span>
+			<span><input type='checkbox' name='loc[]' value="'KILWORTH'">Kilworth</span>
+			<span><input type='checkbox' name='loc[]' value="'KILWORTH CHAPEL'">Kilworth Chapel</span>
+			<span><input type='checkbox' name='loc[]' value="'KITTREDGE'">Kittredge</span>
+			<span><input type='checkbox' name='loc[]' value="'LANGLOW'">Langlow</span>
+			<span><input type='checkbox' name='loc[]' value="'LANGLOW HOUSE'">Langlow House</span>
+			<span><input type='checkbox' name='loc[]' value="'LAW11-13'">Law11-13</span>
+			<span><input type='checkbox' name='loc[]' value="'LAW13-14'">Law13-14</span>
+			<span><input type='checkbox' name='loc[]' value="'LAW15-18'">Law15-18</span>
+			<span><input type='checkbox' name='loc[]' value="'LIBRARY'">Library</span>
+			<span><input type='checkbox' name='loc[]' value="'LIBRARY LOT'">Library Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'LOWER BAKER FIELD'">Lower Baker Field</span>
+			<span><input type='checkbox' name='loc[]' value="'MCINTYRE'">Mcintyre</span>
+			<span><input type='checkbox' name='loc[]' value="'MEDIA HOUSE'">Media House</span>
+			<span><input type='checkbox' name='loc[]' value="'MUSIC'">Music</span>
+			<span><input type='checkbox' name='loc[]' value="'MUSIC HALL'">Music Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'N UNION'">N Union</span>
+			<span><input type='checkbox' name='loc[]' value="'N12THCUL'">N12Thcul</span>
+			<span><input type='checkbox' name='loc[]' value="'N13TH ST'">N13Th St</span>
+			<span><input type='checkbox' name='loc[]' value="'N14TH SC'">N14Th Sc</span>
+			<span><input type='checkbox' name='loc[]' value="'N15TH ST'">N15Th St</span>
+			<span><input type='checkbox' name='loc[]' value="'N18TH LOT'">N18Th Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'NIWA HOUSE'">Niwa House</span>
+			<span><input type='checkbox' name='loc[]' value="'OFF CAMPUS'">Off Campus</span>
+			<span><input type='checkbox' name='loc[]' value="'OPPENHEIMER CAFE'">Oppenheimer Cafe</span>
+			<span><input type='checkbox' name='loc[]' value="'OTHER'">Other</span>
+			<span><input type='checkbox' name='loc[]' value="'OTHER-OFF CAMPUS'">Other-Off Campus</span>
+			<span><input type='checkbox' name='loc[]' value="'OTHER-ON CAMPUS'">Other-On Campus</span>
+			<span><input type='checkbox' name='loc[]' value="'OTHER/UNKNOWN'">Other/Unknown</span>
+			<span><input type='checkbox' name='loc[]' value="'PARKING LOT/GARAGE'">Parking Lot/Garage</span>
+			<span><input type='checkbox' name='loc[]' value="'PHIBBS HALL'">Phibbs Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'PRESIDENT HOUSE'">President House</span>
+			<span><input type='checkbox' name='loc[]' value="'PRESIDENTS HOUSE'">Presidents House</span>
+			<span><input type='checkbox' name='loc[]' value="'RASMUSSEN ROTUNDA'">Rasmussen Rotunda</span>
+			<span><input type='checkbox' name='loc[]' value="'REGESTER HALL'">Regester Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'RESIDENTAL HOUSE/HALL'">Residental House/Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'S UNION'">S Union</span>
+			<span><input type='checkbox' name='loc[]' value="'SCHIFF'">Schiff</span>
+			<span><input type='checkbox' name='loc[]' value="'SCHIFF HALL'">Schiff Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'SCHNEEBECK CONCERT HALL'">Schneebeck Concert Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'SCHOOL/COLLEGE'">School/College</span>
+			<span><input type='checkbox' name='loc[]' value="'SCULPTURE'">Sculpture</span>
+			<span><input type='checkbox' name='loc[]' value="'SCULPTURE HALL'">Sculpture Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'SECURITY SERVICES'">Security Services</span>
+			<span><input type='checkbox' name='loc[]' value="'SEW-REG LOT'">Sew-Reg Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'SEWARD HALL'">Seward Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'SMITH'">Smith</span>
+			<span><input type='checkbox' name='loc[]' value="'SMITH HALL'">Smith Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'SOFTBALL FIELD'">Softball Field</span>
+			<span><input type='checkbox' name='loc[]' value="'SOUTH HALL'">South Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'STUDENT DEVELOPMENT'">Student Development</span>
+			<span><input type='checkbox' name='loc[]' value="'STUDENT DIVERSITY CENTER'">Student Diversity Center</span>
+			<span><input type='checkbox' name='loc[]' value="'TENNIS COURTS'">Tennis Courts</span>
+			<span><input type='checkbox' name='loc[]' value="'THE CELLAR'">The Cellar</span>
+			<span><input type='checkbox' name='loc[]' value="'THEME HOUSE ROW'">Theme House Row</span>
+			<span><input type='checkbox' name='loc[]' value="'THEME ROW HOUSES'">Theme Row Houses</span>
+			<span><input type='checkbox' name='loc[]' value="'THOMPSON HALL'">Thompson Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'TODD FIELD'">Todd Field</span>
+			<span><input type='checkbox' name='loc[]' value="'TODD HALL'">Todd Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'TODD/PHIBBS'">Todd/Phibbs</span>
+			<span><input type='checkbox' name='loc[]' value="'TRIMBLE'">Trimble</span>
+			<span><input type='checkbox' name='loc[]' value="'TRIMBLE FORUM'">Trimble Forum</span>
+			<span><input type='checkbox' name='loc[]' value="'TRIMBLE HALL'">Trimble Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT A'">Unit A</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT B'">Unit B</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT C'">Unit C</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT D'">Unit D</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT E'">Unit E</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT F'">Unit F</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT G'">Unit G</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT H'">Unit H</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIT K'">Unit K</span>
+			<span><input type='checkbox' name='loc[]' value="'UNIVERSITY'">University</span>
+			<span><input type='checkbox' name='loc[]' value="'WALLACE POOL'">Wallace Pool</span>
+			<span><input type='checkbox' name='loc[]' value="'WARNER GYM'">Warner Gym</span>
+			<span><input type='checkbox' name='loc[]' value="'WEYERHAUSER HALL'">Weyerhauser Hall</span>
+			<span><input type='checkbox' name='loc[]' value="'WHEELOCK STUDENT CENTER'">Wheelock Student Center</span>
+			<span><input type='checkbox' name='loc[]' value="'WSC'">Wsc</span>
+			<span><input type='checkbox' name='loc[]' value="'WSC LOT'">Wsc Lot</span>
+			<span><input type='checkbox' name='loc[]' value="'WYATT'">Wyatt</span>
+			<span><input type='checkbox' name='loc[]' value="'WYATT HALL'">Wyatt Hall</span>
+			<br />
+			<input type="submit" value="Submit">
+		</form>
+		<div id="results">
+			
+		</div>
+	</body>
+</html>

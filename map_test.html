@@ -1,0 +1,564 @@
+<!doctype html>
+<html>
+	<head>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<title>Puget Sound Security Incident Visualization</title>
+		
+		<!-- Google Chrome Frame for IE -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		
+		<!-- mobile meta (hooray!) -->
+		<!-- <meta name="HandheldFriendly" content="True"> -->
+		<!-- <meta name="MobileOptimized" content="320"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" /> 
+		<link rel="stylesheet" type="text/css" href="style.css" />
+
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+		<!--[if lte IE 8]>
+			<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+		<![endif]-->
+		<script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+		
+		<!-- D3 Visualization Stuff -->
+		<!-- <script src="http://d3js.org/d3.v2.js"></script> -->
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="smartResize/smartResize.js"></script>
+		<!-- <script type="text/javascript" src="enquire/enquire.min.js"></script> -->
+		<!-- <script src="http://code.highcharts.com/highcharts.js"></script> -->
+		<script>
+			//Load the Visualization API and the piechart package.
+			google.load('visualization', '1.0', {'packages':['corechart']});
+			var chart;
+			var genChart = function(pieData){
+				if($(".graph-toggle").hasClass("shown")){
+					//console.log(pieData);
+					$("#graph").empty();
+					var options = {
+						backgroundColor: "transparent",
+						pieSliceBorderColor: "transparent",
+						chartArea:{top:20},
+						//chartArea:{top:20, width:"100%"},
+						legend: {position: "bottom", textStyle: {color: "white", fontSize: 12}}
+					};
+					//Create and populate the data table.
+					var data = google.visualization.arrayToDataTable(pieData,true);
+					//Create and draw the visualization.
+					chart = new google.visualization.PieChart(document.getElementById('graph'));
+					function selectHandler() {
+						var selectedItem = chart.getSelection()[0];
+						if (selectedItem) {
+							var incidentCat = data.getValue(selectedItem.row, 0);
+							alert('The user selected ' + incidentCat);
+						}
+					}
+
+					google.visualization.events.addListener(chart, 'select', selectHandler); 
+					
+					chart.draw(data,options);
+				}
+			};
+			
+			$(window).smartresize(function(){  
+				genChart(processedChartData);
+				console.log("Window resized!");
+			});
+			
+			//Enquire script to only automatically fire the genChart function when the mobile version kicks in
+			/*enquire.register("screen and (min-width: 1030px)", {
+				match : function() {genChart(processedChartData);},
+				unmatch : function() {genChart(processedChartData);}
+			}).listen();*/
+		</script>
+		
+		<!-- Date Slider -->
+		<!-- <link rel="stylesheet" id="dateCSS" href="jQRangeSlider-min/css/classic.css"> 
+		<script src="jQRangeSlider-min/jQAllRangeSliders-min.js"></script> -->
+		<script>
+			$(function() {
+				//$("#date").dateRangeSlider({/*options*/});
+				$("#datepicker-start").datepicker({
+					changeYear: true,
+					dateFormat: "yy-mm-dd",
+					onClose: function( selectedDate ) {
+						$("#datepicker-end").datepicker( "option", "minDate", selectedDate );
+					}
+				});
+				$("#datepicker-end").datepicker({
+					changeYear: true,
+					dateFormat: "yy-mm-dd",
+					onClose: function( selectedDate ) {
+						$("#datepicker-start").datepicker( "option", "maxDate", selectedDate );
+					}
+				});
+				$("#datepicker-start").datepicker("setDate", "-1m");
+				$("#datepicker-end").datepicker("setDate", new Date());
+			});
+		</script>
+		
+		<!-- Time Picker -->
+		<link rel="stylesheet" type="text/css" href="timepicker/jquery.ui.timepicker.css" />
+		<script type="text/javascript" src="timepicker/jquery.ui.timepicker.js"></script>
+		<!-- <script type="text/javascript" src="jquery-ui-timeslider/jquery.ui.timeslider.js"></script> -->
+		<script>
+			function timepickerValidate(){
+				var startVal = $('#timepicker-start').timepicker("getTime");
+				startVal = (startVal == "Missing instance data for this timepicker") ? "" : startVal;
+				var startTime = startVal.replace(":","");
+				var endVal = $('#timepicker-end').timepicker("getTime");
+				endVal = (endVal == "Missing instance data for this timepicker") ? "" : endVal;
+				var endTime = endVal.replace(":","");
+				if(startVal != "" && endVal != "" && startTime > endTime){
+					$('#timepicker-start').timepicker("setTime",endVal);
+					$('#timepicker-end').timepicker("setTime",startVal);
+				}
+			}
+			$(function() {
+				$('#timepicker-start').timepicker({
+					showLeadingZero: true,
+					timeSeparator: ':',
+					//onHourShow: tpStartOnHourShowCallback,
+					//onMinuteShow: tpStartOnMinuteShowCallback,
+					onClose: timepickerValidate,
+					hours: {
+						starts: 0,                // First displayed hour
+						ends: 23                  // Last displayed hour
+					},
+					minutes: {
+						starts: 0,                // First displayed minute
+						ends: 59,                 // Last displayed minute
+						interval: 1               // Interval of displayed minutes
+					},
+					rows: 6,                      // Number of rows for the input tables, minimum 2, makes more sense if you use multiple of 2
+
+					// buttons
+					showCloseButton: true,       // shows an OK button to confirm the edit
+					closeButtonText: 'Done',      // Text for the confirmation button (ok button)
+					showNowButton: false,         // Shows the 'now' button
+					showDeselectButton: true,    // Shows the deselect time button
+					deselectButtonText: 'Clear' // Text for the deselect button
+				});
+				$('#timepicker-end').timepicker({
+					showLeadingZero: true,
+					timeSeparator: ':',
+					//onHourShow: tpEndOnHourShowCallback,
+					//onMinuteShow: tpEndOnMinuteShowCallback,
+					onClose: timepickerValidate,
+					hours: {
+						starts: 0,                // First displayed hour
+						ends: 23                  // Last displayed hour
+					},
+					minutes: {
+						starts: 0,                // First displayed minute
+						ends: 59,                 // Last displayed minute
+						interval: 1               // Interval of displayed minutes
+					},
+					rows: 6,                      // Number of rows for the input tables, minimum 2, makes more sense if you use multiple of 2
+
+					// buttons
+					showCloseButton: true,       // shows an OK button to confirm the edit
+					closeButtonText: 'Done',      // Text for the confirmation button (ok button)
+					showNowButton: false,         // Shows the 'now' button
+					showDeselectButton: true,    // Shows the deselect time button
+					deselectButtonText: 'Clear' // Text for the deselect button
+				});
+			});
+		</script>
+		
+		<!-- Marker Cluster Plugin -->
+		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.css" />
+		<link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="Leaflet.markercluster/dist/MarkerCluster.Default.ie.css" /><![endif]-->
+		<script type="text/javascript" src="Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+		<script>
+			//Generic incident icon class
+			var IncidentIcon = L.Icon.extend({
+				options: {
+					iconSize:     [35, 35], // size of the icon
+					iconAnchor:   [17.5, 27], // point of the icon which will correspond to marker's location
+					popupAnchor:  [0, -23] // point from which the popup should open relative to the iconAnchor
+				}
+			});
+			
+			//Individual icons for each Clery category
+			var liquorIcon = new IncidentIcon({iconUrl: 'icons/liquor.svg'});
+			var robberyIcon = new IncidentIcon({iconUrl: 'icons/robbery.svg'});
+			var assaultIcon = new IncidentIcon({iconUrl: 'icons/assault.svg'});
+			var burglaryIcon = new IncidentIcon({iconUrl: 'icons/burglary.svg'});
+			var murderIcon = new IncidentIcon({iconUrl: 'icons/murder.svg'});
+			var carTheftIcon = new IncidentIcon({iconUrl: 'icons/car.svg', iconAnchor: [17.5, 20]});
+			var drugIcon = new IncidentIcon({iconUrl: 'icons/drugs.svg'});
+			var weaponIcon = new IncidentIcon({iconUrl: 'icons/gun.svg', iconAnchor: [17.5, 17]});
+			var theftIcon = new IncidentIcon({iconUrl: 'icons/pickpocket.svg', iconAnchor: [24.5, 27]});
+			var vandalismIcon = new IncidentIcon({iconUrl: 'icons/vandalism.svg'});
+			var sexOffenseIcon = new IncidentIcon({iconUrl: 'icons/sexoffense.svg'});
+			var attemptedCrimeIcon = new IncidentIcon({iconUrl: 'icons/arrest.svg'});
+			var manslaughterIcon = new IncidentIcon({iconUrl: 'icons/manslaughter.svg'});
+			var unknownIcon = new IncidentIcon({iconUrl: 'icons/unknown.svg'});
+			
+			var chartData = {}; //Raw chart data
+			var processedChartData = []; //Processed chart data used by the genChart function
+			
+			//Custom info control for map
+			var infoControl = L.Control.extend({
+				options: {
+					position: 'topleft'
+				},
+				onAdd: function (map) {
+					var className = 'vis-control-info',
+						container = L.DomUtil.create('div', className);
+					this._map = map;
+					this._infoButton = this._createButton('','More information', className + '-button',container,this._showInfo,this);
+					return container;
+				},
+
+				_showInfo: function (e) {
+					var dialogWidth = $(window).width();
+					var dialogHeight = $(window).height();
+					if(dialogWidth <= 650){dialogWidth = dialogWidth * 0.9;}
+					else{dialogWidth = 625;}
+					if(dialogHeight <= 500){dialogHeight = dialogHeight * 0.9;}
+					else{dialogHeight = 400;}
+					$("#info-modal").dialog("option","width",dialogWidth);
+					$("#info-modal").dialog("option","height",dialogHeight);
+					$("#info-modal").dialog("open");
+				},
+
+				_createButton: function (html, title, className, container, fn, context) {
+					var link = L.DomUtil.create('a', className, container);
+					link.innerHTML = html;
+					link.href = '#';
+					link.title = title;
+
+					L.DomEvent
+						.on(link,'click',L.DomEvent.stopPropagation)
+						.on(link,'mousedown',L.DomEvent.stopPropagation)
+						.on(link,'dblclick',L.DomEvent.stopPropagation)
+						.on(link,'click',L.DomEvent.preventDefault)
+						.on(link,'click',fn,context);
+					return link;
+				}
+			});
+			
+			
+			$(function() {
+				// create a map in the "map" div, set the view to a given place and zoom
+				var map = L.map('map').setView([47.261743,-122.481775], 16);
+				var markers; //Global variable to hold the markers
+				
+				// add a CloudMade tile layer with style #997
+				L.tileLayer('http://{s}.tile.cloudmade.com/eac20f969c234bed8c6e3191bbac3bfc/997/256/{z}/{x}/{y}.png', {
+					attribution: 'Map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>'
+				}).addTo(map);
+				
+				//Prepare "More Information" modal dialog
+				$("#info-modal").dialog({
+					modal: true,
+					autoOpen: false,
+					open: function(){
+						$("#info-sections").show();
+						$("#info-sections").accordion({ collapsible:true, active:0, heightStyle:"content" });
+					}
+				});
+				
+				//Add custom info button to map
+				map.addControl(new infoControl());
+				
+				$.ajax({
+						type: "POST",
+						url: "db_select_records_json.php",
+						data: { data: "real", beginDate: "2012-10-01", endDate: "2012-11-01" }
+					}).done(function(data) {
+						var incidents = jQuery.makeArray(data.incidents);
+						alert("Inserting " + incidents.length + " records!");
+						markers = new L.MarkerClusterGroup();
+						$.each(incidents, function() {
+							var curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
+							curLat = this.lat;
+							curLong = this.long;
+							curType = this.type;
+							curDate = this.date;
+							curTime = this.time;
+							curLoc = this.location;
+							curPopup = "Type: " + curType + "<br />Location: " + curLoc + "<br / >Date: " + curDate + "<br />Time: " + curTime;
+							//console.log(this.time);
+							switch(curType){
+								case "AGGRAVATED ASSAULT":
+								curIcon = assaultIcon;
+								break;
+								case "BURGLARY":
+								curIcon = burglaryIcon;
+								break;
+								case "MURDER / NON-NEGLIGENT MANSLAUGHTER":
+								curIcon = murderIcon;
+								break;
+								case "NEGLIGENT MANSLAUGHTER":
+								curIcon = manslaughterIcon;
+								break;
+								case "MOTOR VEHICLE THEFT":
+								curIcon = carTheftIcon;
+								break;
+								case "ROBBERY":
+								curIcon = robberyIcon;
+								break;
+								case "SEX OFFENSE - NON-FORCIBLE":
+								curIcon = sexOffenseIcon;
+								break;
+								case "SEX OFFENSE - FORCIBLE":
+								curIcon = sexOffenseIcon;
+								break;
+								case "LIQUOR LAW VIOLATIONS":
+								curIcon = liquorIcon;
+								break;
+								case "DRUG ABUSE VIOLATIONS":
+								curIcon = drugIcon;
+								break;
+								case "WEAPON VIOLATIONS":
+								curIcon = weaponIcon;
+								break;
+								case "THEFT":
+								curIcon = theftIcon;
+								break;
+								case "ATTEMPTED CRIME":
+								curIcon = attemptedCrimeIcon;
+								break;
+								case "VANDALISM":
+								curIcon = vandalismIcon;
+								break;
+								default:
+								curIcon = unknownIcon;
+							}
+							
+							curMarker = new L.marker([curLat, curLong], {icon: curIcon});
+							curMarker.bindPopup(curPopup);
+							markers.addLayer(curMarker);							
+							
+							if(chartData.hasOwnProperty(this.type)){
+								chartData[this.type] += 1;
+							}
+							else{
+								chartData[this.type] = 1;
+							}
+						});
+						map.addLayer(markers);
+						//var processedChartData = [];
+						$.each(chartData, function(name,value){
+							var cur = [name,value];
+							processedChartData.push(cur);
+						});
+						//console.log(chartData);
+						//alert(newData.toString());
+						//genChart(chartData);
+						processedChartData.sort(function(a,b){
+							return b[1] - a[1];
+						});
+						genChart(processedChartData);
+					});
+
+				//Bind click event to filter toggle
+				$(".filter-toggle").click(function(){
+					$("#filters").slideToggle();
+					$(this).toggleClass("shown");
+				});
+				
+				//Bind click event to filter toggle
+				$(".graph-toggle").click(function(){
+					$("#graph").toggle("fast", function(){
+						$(".graph-toggle").toggleClass("shown");
+						genChart(processedChartData);
+					});
+				});
+				
+				//Bind click event to clicking submit button
+				$("input[value='Submit']").click(function () {
+					var dataVal, beginDateVal, endDateVal;
+					dataVal = $("input:radio[name='data']:checked").val();
+					//beginDateVal = $("input[name='beginDate']").val();
+					beginDateVal = $("input[name='datepicker-start']").val();
+					//endDateVal = $("input[name='endDate']").val();
+					endDateVal = $("input[name='datepicker-end']").val();
+					chartData = {};
+					processedChartData = [];
+					$.ajax({
+						type: "POST",
+						url: "db_select_records_json.php",
+						data: { data: dataVal, beginDate: beginDateVal, endDate: endDateVal }
+					}).done(function(data) {
+						var incidents = jQuery.makeArray(data.incidents);
+						alert("Inserting " + incidents.length + " records!");
+						markers.clearLayers();
+						markers = new L.MarkerClusterGroup();
+						$.each(incidents, function() {
+							var curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
+							curLat = this.lat;
+							curLong = this.long;
+							curType = this.type;
+							curDate = this.date;
+							curTime = this.time;
+							curLoc = this.location;
+							curPopup = "Type: " + curType + "<br />Location: " + curLoc + "<br / >Date: " + curDate + "<br />Time: " + curTime;
+							//console.log(this.time);
+							switch(curType){
+								case "AGGRAVATED ASSAULT":
+								curIcon = assaultIcon;
+								break;
+								case "BURGLARY":
+								curIcon = burglaryIcon;
+								break;
+								case "MURDER / NON-NEGLIGENT MANSLAUGHTER":
+								curIcon = murderIcon;
+								break;
+								case "NEGLIGENT MANSLAUGHTER":
+								curIcon = manslaughterIcon;
+								break;
+								case "MOTOR VEHICLE THEFT":
+								curIcon = carTheftIcon;
+								break;
+								case "ROBBERY":
+								curIcon = robberyIcon;
+								break;
+								case "SEX OFFENSE - NON-FORCIBLE":
+								curIcon = sexOffenseIcon;
+								break;
+								case "SEX OFFENSE - FORCIBLE":
+								curIcon = sexOffenseIcon;
+								break;
+								case "LIQUOR LAW VIOLATIONS":
+								curIcon = liquorIcon;
+								break;
+								case "DRUG ABUSE VIOLATIONS":
+								curIcon = drugIcon;
+								break;
+								case "WEAPON VIOLATIONS":
+								curIcon = weaponIcon;
+								break;
+								case "THEFT":
+								curIcon = theftIcon;
+								break;
+								case "ATTEMPTED CRIME":
+								curIcon = attemptedCrimeIcon;
+								break;
+								case "VANDALISM":
+								curIcon = vandalismIcon;
+								break;
+								default:
+								curIcon = unknownIcon;
+							}
+							
+							curMarker = new L.marker([curLat, curLong], {icon: curIcon});
+							curMarker.bindPopup(curPopup);
+							markers.addLayer(curMarker);
+							//markers.addLayer(L.marker([curLat, curLong], {icon: curIcon}).bindPopup(curPopup));
+							
+							
+							if(chartData.hasOwnProperty(this.type)){
+								chartData[this.type] += 1;
+							}
+							else{
+								chartData[this.type] = 1;
+							}
+						});
+						map.addLayer(markers);
+						//var newData = [];
+						$.each(chartData, function(name,value){
+							var cur = [name,value];
+							processedChartData.push(cur);
+						});
+						//console.log(chartData);
+						//alert(newData.toString());
+						//genChart(chartData);
+						processedChartData.sort(function(a,b){
+							return b[1] - a[1];
+						});
+						genChart(processedChartData);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<aside id="controls">
+			<h2 class="filter-toggle">Filter Incident Data</h2>
+			<div id="filters">
+				<div class="filter-field">
+					<label for="data">Data set:</label>
+					<input type="radio" name="data" value="real" checked="checked" class="realDB">Real<br />
+					<!-- <input type="radio" name="data" value="fake" class="fakeDB">Fake -->
+				</div>
+				<div class="filter-field">
+					<label for="datepicker-start">Date Range:</label>
+					<input type="text" name="datepicker-start" id="datepicker-start"> to
+					<input type="text" name="datepicker-end" id="datepicker-end">
+				</div>
+				<div class="filter-field">
+					<label for="timepicker-start">Time Range:</label>
+					<input type="text" name="timepicker-start" id="timepicker-start"> to
+					<input type="text" name="timepicker-end" id="timepicker-end">
+				</div>
+				<div class="filter-field">
+					<input type="submit" value="Submit" id="submitButton">
+				</div>
+			</div>
+		</aside>
+		<aside id="vis">
+			<h2 class="graph-toggle">Incident Graph</h2>
+			<div id="graph"></div>
+		</aside>
+		<aside id="info-modal" style="display:none;" title="More information">
+			<div id="info-sections">
+				<h3><a href="#">About the project</a></h3>
+				<div>
+					<p>This visualization represents security incidents reported on the University of Puget Sound campus. Incidents are broken up by the <a href="http://en.wikipedia.org/wiki/Clery_Act">Clery Act's</a> crime statistics categories, and can be filtered based based on the date and time they occurred. The user is also able to display data from a database of randomly generated incidents.</p>
+					<p>The project was created as part of Scott Dunham's CS460 senior project. It is hoped that a tool such as this would be of use to Puget Sound's security staff in analyzing their security incident data.</p>
+				</div>
+				<h3><a href="#">System requirements</a></h3>
+				<div>
+					<p>This visualization utilizes modern web technologies, and is best viewed using a modern web browser. Supported browsers include the most current versions of Chrome, Firefox, Opera, Safari, and Internet Explorer 9 (or greater).</p>
+				</div>
+				<h3><a href="#">Attribution</a></h3>
+				<div>
+					<p>The following technologies were used in the creation of this visualization:</p>
+					<p><strong>Map Components:</strong></p>
+					<ul>
+						<li><a href="http://leafletjs.com/">Leaflet</a></li>
+						<li><a href="http://www.openstreetmap.org/">Open Street Map tiles</a></li>
+						<li><a href="http://maps.cloudmade.com/editor">Cloudmade Map Styles</a></li>
+						<li><a href="https://github.com/danzel/Leaflet.markercluster">Leaflet.markercluster</a></li>
+					</ul>
+					<p><strong>Chart Component:</strong></p>
+					<ul>
+						<li><a href="https://developers.google.com/chart/">Google Chart Tools</a></li>
+					</ul>
+					<p><strong>User Interface Components:</strong></p>
+					<ul>
+						<li><a href="http://jqueryui.com/">jQuery UI Widgets</a></li>
+						<li><a href="http://fgelinas.com/code/timepicker/">Timepicker jQuery UI Plugin</a></li>
+					</ul>
+					<p><strong>Icons:</strong></p>
+					<ul>
+						<li><a href="http://thenounproject.com/noun/question/#icon-No6165" target="_blank">Question</a> designed by <a href="http://thenounproject.com/tlb" target="_blank">Thomas Le Bas</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/flask/#icon-No1725" target="_blank">Flask</a> designed by <a href="http://thenounproject.com/jsoderberg91" target="_blank">Julia Soderberg</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/robbery/#icon-No4270" target="_blank">Robbery</a> designed by <a href="http://thenounproject.com/ochaavmu" target="_blank">United Nations OCHA</a></li>
+						<li><a href="http://thenounproject.com/noun/robbery/#icon-No4270" target="_blank">Assault</a> (used as manslaughter) designed by <a href="http://thenounproject.com/ochaavmu" target="_blank">United Nations OCHA</a></li>
+						<li><a href="http://thenounproject.com/noun/ski-mask/#icon-No5281" target="_blank">Ski Mask</a> designed by <a href="http://thenounproject.com/United%20Unknown" target="_blank">United Unknown</a></li>
+						<li><a href="http://thenounproject.com/noun/murder/#icon-No4269" target="_blank">Murder</a> designed by <a href="http://thenounproject.com/ochaavmu" target="_blank">United Nations OCHA</a></li>
+						<li><a href="http://thenounproject.com/noun/forced-recruitment/#icon-No4265" target="_blank">Forced Recruitment</a> (used as sex offense) designed by <a href="http://thenounproject.com/ochaavmu" target="_blank">United Nations OCHA</a></li>
+						<li><a href="http://thenounproject.com/noun/car/#icon-No996" target="_blank">Car</a> designed by <a href="http://thenounproject.com/Jeremy" target="_blank">Geremy Good</a></li>
+						<li><a href="http://thenounproject.com/noun/pill/#icon-No382" target="_blank">Pill</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/gun/#icon-No138" target="_blank">Gun</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/pickpocket/#icon-No1368" target="_blank">Pickpocket</a> designed by <a href="http://thenounproject.com/PKG" target="_blank">Proletkult Graphik</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/arrest/#icon-No4259" target="_blank">Arrest</a> (used as attempted crime) designed by <a href="http://thenounproject.com/ochaavmu" target="_blank">United Nations OCHA</a></li>
+						<li><a href="http://thenounproject.com/noun/hit/#icon-No6593" target="_blank">Hit</a> (used as assault) designed by <a href="http://thenounproject.com/ezy" target="_blank">Ezra Keddell</a> from The Noun Project</li>
+						<li><a href="http://thenounproject.com/noun/information/#icon-No5745" target="_blank">Information</a> designed by <a href="http://thenounproject.com/kaduma" target="_blank">David Cadusseau</a> from The Noun Project</li>
+					</ul>
+				</div>
+			</div>​
+		</aside>
+		<section id="map"></section>
+	</body>
+</html>
