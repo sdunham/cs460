@@ -14,13 +14,13 @@ and will be used across all viewports.
 body { font:12px sans-serif; }
 html, body, #map { height:100%; width:100%; margin:0; padding:0; }
 p, ul { margin-bottom:10px; }
+ul { margin-left:16px; }
 #map { z-index:1; }
 #vis, #controls { position:absolute; z-index:2; background:#78824F; background:rgba(120,130,79,0.85); box-shadow:0 0 20px black; color:#fff; }
 #vis { top:0; width:100%; }
 #graph { min-height:250px; display:none; }
 #controls { width:100%; bottom:0; left:0; }
 #controls h2, #vis h2 { text-align:center; font-style:italic; margin:2px; }
-#controls label { float:left; margin-right:10px; font-weight:bold; min-width:75px; text-align:right; }
 .filter-toggle { cursor:pointer; }
 .filter-toggle::before { content: "\2191"; font-size:15px; margin-right:5px; vertical-align:text-top; }
 .filter-toggle.shown::before { content: "\2193"; font-size:15px; margin-right:5px; vertical-align:text-top; }
@@ -29,7 +29,11 @@ p, ul { margin-bottom:10px; }
 .graph-toggle.shown::before { content: "\2191"; font-size:15px; margin-right:5px; vertical-align:text-top; }
 #filters { display:none; }
 .filter-field { width:275px; margin:5px auto; }
+.filter-field > label { float:left; margin-right:10px; font-weight:bold; min-width:75px; text-align:right; }
 .filter-field input[type=text] { width:80px; text-align:center; }
+input[value="Submit"] { float:right; margin:5px; width:185px; }
+#incident-select { width:185px; }
+#data-radios label { width:90px; }
 
 /* Custom info button styles */
 .vis-control-info { padding:5px; background:rgba(0, 0, 0, 0.25); moz-border-radius:7px; -webkit-border-radius:7px; border-radius:7px; }

@@ -56,7 +56,7 @@
 						var selectedItem = chart.getSelection()[0];
 						if (selectedItem) {
 							var incidentCat = data.getValue(selectedItem.row, 0);
-							alert('The user selected ' + incidentCat);
+							//alert('The user selected ' + incidentCat);
 						}
 					}
 
@@ -268,6 +268,15 @@
 					}
 				});
 				
+				//Prepare Real/Fake jQuery UI button set
+				$("#data-radios").buttonset();
+				
+				//Prepare Submit jQuery UI button
+				$("input[value='Submit']").button();
+				
+				//Prepare jQuery UI tooltip for incident type select field
+				$("#incident-select").tooltip();
+				
 				//Add custom info button to map
 				map.addControl(new infoControl());
 				
@@ -277,7 +286,7 @@
 						data: { data: "real", beginDate: "2012-10-01", endDate: "2012-11-01" }
 					}).done(function(data) {
 						var incidents = jQuery.makeArray(data.incidents);
-						alert("Inserting " + incidents.length + " records!");
+						//alert("Inserting " + incidents.length + " records!");
 						markers = new L.MarkerClusterGroup();
 						$.each(incidents, function() {
 							var curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
@@ -288,8 +297,8 @@
 							curTime = this.time;
 							curLoc = this.location;
 							curPopup = "Type: " + curType + "<br />Location: " + curLoc + "<br / >Date: " + curDate + "<br />Time: " + curTime;
-							//console.log(this.time);
-							switch(curType){
+							//console.log(curType.toUpperCase());
+							switch(curType.toUpperCase()){
 								case "AGGRAVATED ASSAULT":
 								curIcon = assaultIcon;
 								break;
@@ -392,7 +401,7 @@
 						data: { data: dataVal, beginDate: beginDateVal, endDate: endDateVal }
 					}).done(function(data) {
 						var incidents = jQuery.makeArray(data.incidents);
-						alert("Inserting " + incidents.length + " records!");
+						//alert("Inserting " + incidents.length + " records!");
 						markers.clearLayers();
 						markers = new L.MarkerClusterGroup();
 						$.each(incidents, function() {
@@ -405,7 +414,7 @@
 							curLoc = this.location;
 							curPopup = "Type: " + curType + "<br />Location: " + curLoc + "<br / >Date: " + curDate + "<br />Time: " + curTime;
 							//console.log(this.time);
-							switch(curType){
+							switch(curType.toUpperCase()){
 								case "AGGRAVATED ASSAULT":
 								curIcon = assaultIcon;
 								break;
@@ -484,13 +493,21 @@
 		</script>
 	</head>
 	<body>
+		<aside id="fake-warn" class="ui-state-error ui-corner-all" style="width:280px; height:50px; position:absolute; top:10px; z-index:5; left:15%; display:none;">
+			<p style="padding:15px; margin:0; height:100%;">
+				<span class="ui-icon ui-icon-alert" style="float:left; margin-left:5px;"></span>
+				<strong>Alert:</strong> You are currently viewing fake data!
+			</p>
+		</aside>
 		<aside id="controls">
 			<h2 class="filter-toggle">Filter Incident Data</h2>
 			<div id="filters">
 				<div class="filter-field">
-					<label for="data">Data set:</label>
-					<input type="radio" name="data" value="real" checked="checked" class="realDB">Real<br />
-					<!-- <input type="radio" name="data" value="fake" class="fakeDB">Fake -->
+					<label for="data-radios">Data set:</label>
+					<span id="data-radios">
+						<input type="radio" name="data" value="real" checked="checked" id="realDB"><label for="realDB">Real</label>
+						<input type="radio" name="data" value="fake" id="fakeDB"><label for="fakeDB">Fake</label>
+					</span>
 				</div>
 				<div class="filter-field">
 					<label for="datepicker-start">Date Range:</label>
@@ -501,6 +518,27 @@
 					<label for="timepicker-start">Time Range:</label>
 					<input type="text" name="timepicker-start" id="timepicker-start"> to
 					<input type="text" name="timepicker-end" id="timepicker-end">
+				</div>
+				<div class="filter-field">
+					<label for="incident-select">Type(s):</label>
+					<select multiple="multiple" name="incident-select" id="incident-select" title="Hold ctrl while clicking to select multiple types">
+						<option disabled="disabled">Select Type(s):</option>
+						<option value="AGGRAVATED ASSAULT">Aggravated Assault</option>
+						<option value="ATTEMPTED CRIME">Attempted Crime</option>
+						<option value="BURGLARY">Burglary</option>
+						<option value="DRUG ABUSE VIOLATIONS">Drug Abuse Violations</option>
+						<option value="LIQUOR LAW VIOLATIONS">Liquor Law Violations</option>
+						<option value="MOTOR VEHICLE THEFT">Motor Vehicle Theft</option>
+						<option value="MURDER / NON-NEGLIGENT MANSLAUGHTER">Murder</option>
+						<option value="NEGLIGENT MANSLAUGHTER">Negligent Manslaughter</option>
+						<option value="ROBBERY">Robbery</option>
+						<option value="SEX OFFENSE - FORCIBLE">Sex Offense (Forcible)</option>
+						<option value="SEX OFFENSE - NON-FORCIBLE">Sex Offense (Non-Forcible)</option>
+						<option value="THEFT">Theft</option>
+						<option value="UNKNOWN">Unknown</option>
+						<option value="VANDALISM">Vandalism</option>
+						<option value="WEAPON VIOLATIONS">Weapon Violations</option>
+					</select>
 				</div>
 				<div class="filter-field">
 					<input type="submit" value="Submit" id="submitButton">
