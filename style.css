@@ -33,7 +33,8 @@ ul { margin-left:16px; }
 .filter-field input[type=text] { width:80px; text-align:center; }
 input[value="Submit"] { float:right; margin:5px; width:185px; }
 #incident-select { width:185px; }
-#data-radios label { width:90px; }
+#data-radios { margin-left:10px; }
+#data-radios label { width:80px; }
 
 /* Custom info button styles */
 .vis-control-info { padding:5px; background:rgba(0, 0, 0, 0.25); moz-border-radius:7px; -webkit-border-radius:7px; border-radius:7px; }
