@@ -22,19 +22,20 @@ if(!empty($_POST["endDate"])){
 	$whereArr["endDate"] = "date <= '" . $_POST["endDate"] . "'";
 }
 if(!empty($_POST["beginTime"])){
-	$whereArr["beginTime"] = "time >= '" . $_POST["beginTime"] . "00'";
+	$whereArr["beginTime"] = "time >= '" . $_POST["beginTime"] . ":00'";
 }
 if(!empty($_POST["endTime"])){
-	$whereArr["endTime"] = "time <= '" . $_POST["endTime"] . "00'";
+	$whereArr["endTime"] = "time <= '" . $_POST["endTime"] . ":00'";
 }
 if(!empty($_POST["type"])){
 	$typeVals = implode(",",$_POST["type"]);
 	$whereArr["type"] = "type IN (" . $typeVals . ")";
 }
-if(!empty($_POST["loc"])){
+
+/*if(!empty($_POST["loc"])){
 	$locVals = implode(",",$_POST["loc"]);
 	$whereArr["loc"] = "location IN (" . $locVals . ")";
-}
+}*/
 
 //Empty string to hold the WHERE clause to be used in this SQL statement
 $where = "";

@@ -98,7 +98,7 @@
 						$("#datepicker-start").datepicker( "option", "maxDate", selectedDate );
 					}
 				});
-				$("#datepicker-start").datepicker("setDate", "-1m");
+				$("#datepicker-start").datepicker("setDate", "-2m");
 				$("#datepicker-end").datepicker("setDate", new Date());
 			});
 		</script>
@@ -387,19 +387,26 @@
 				
 				//Bind click event to clicking submit button
 				$("input[value='Submit']").click(function () {
-					var dataVal, beginDateVal, endDateVal, typeVals;
+					var dataVal, beginDateVal, endDateVal, beginTimeVal, endTimeVal, typeVals;
 					dataVal = $("input:radio[name='data']:checked").val();
-					//beginDateVal = $("input[name='beginDate']").val();
 					beginDateVal = $("input[name='datepicker-start']").val();
-					//endDateVal = $("input[name='endDate']").val();
 					endDateVal = $("input[name='datepicker-end']").val();
+					beginTimeVal = $("input[name='timepicker-start']").val();
+					endTimeVal = $("input[name='timepicker-end']").val();
 					typeVals = $("#incident-select").val();
 					chartData = {};
 					processedChartData = [];
 					$.ajax({
 						type: "POST",
 						url: "db_select_records_json.php",
-						data: { data: dataVal, beginDate: beginDateVal, endDate: endDateVal, type: typeVals }
+						data: {
+							data: dataVal,
+							beginDate: beginDateVal,
+							endDate: endDateVal,
+							beginTime: beginTimeVal,
+							endTime: endTimeVal,
+							type: typeVals
+						}
 					}).done(function(data) {
 						var incidents = jQuery.makeArray(data.incidents);
 						//alert("Inserting " + incidents.length + " records!");
@@ -517,28 +524,28 @@
 				</div>
 				<div class="filter-field">
 					<label for="timepicker-start">Time Range:</label>
-					<input type="text" name="timepicker-start" id="timepicker-start"> to
-					<input type="text" name="timepicker-end" id="timepicker-end">
+					<input type="text" name="timepicker-start" id="timepicker-start" value="00:00"> to
+					<input type="text" name="timepicker-end" id="timepicker-end" value="23:59">
 				</div>
 				<div class="filter-field">
 					<label for="incident-select">Type(s):</label>
 					<select multiple="multiple" name="incident-select" id="incident-select" title="Hold ctrl while clicking to select multiple types">
 						<option disabled="disabled">Select Type(s):</option>
-						<option name="type[]" value="AGGRAVATED ASSAULT">Aggravated Assault</option>
-						<option name="type[]" value="ATTEMPTED CRIME">Attempted Crime</option>
-						<option name="type[]" value="BURGLARY">Burglary</option>
-						<option name="type[]" value="DRUG ABUSE VIOLATIONS">Drug Abuse Violations</option>
-						<option name="type[]" value="LIQUOR LAW VIOLATIONS">Liquor Law Violations</option>
-						<option name="type[]" value="MOTOR VEHICLE THEFT">Motor Vehicle Theft</option>
-						<option name="type[]" value="MURDER / NON-NEGLIGENT MANSLAUGHTER">Murder</option>
-						<option name="type[]" value="NEGLIGENT MANSLAUGHTER">Negligent Manslaughter</option>
-						<option name="type[]" value="ROBBERY">Robbery</option>
-						<option name="type[]" value="SEX OFFENSE - FORCIBLE">Sex Offense (Forcible)</option>
-						<option name="type[]" value="SEX OFFENSE - NON-FORCIBLE">Sex Offense (Non-Forcible)</option>
-						<option name="type[]" value="THEFT">Theft</option>
-						<option name="type[]" value="UNKNOWN">Unknown</option>
-						<option name="type[]" value="VANDALISM">Vandalism</option>
-						<option name="type[]" value="WEAPON VIOLATIONS">Weapon Violations</option>
+						<option selected="selected" value="'AGGRAVATED ASSAULT'">Aggravated Assault</option>
+						<option selected="selected" value="'ATTEMPTED CRIME'">Attempted Crime</option>
+						<option selected="selected" value="'BURGLARY'">Burglary</option>
+						<option selected="selected" value="'DRUG ABUSE VIOLATIONS'">Drug Abuse Violations</option>
+						<option selected="selected" value="'LIQUOR LAW VIOLATIONS'">Liquor Law Violations</option>
+						<option selected="selected" value="'MOTOR VEHICLE THEFT'">Motor Vehicle Theft</option>
+						<option selected="selected" value="'MURDER / NON-NEGLIGENT MANSLAUGHTER'">Murder</option>
+						<option selected="selected" value="'NEGLIGENT MANSLAUGHTER'">Negligent Manslaughter</option>
+						<option selected="selected" value="'ROBBERY'">Robbery</option>
+						<option selected="selected" value="'SEX OFFENSE - FORCIBLE'">Sex Offense (Forcible)</option>
+						<option selected="selected" value="'SEX OFFENSE - NON-FORCIBLE'">Sex Offense (Non-Forcible)</option>
+						<option selected="selected" value="'THEFT'">Theft</option>
+						<option value="'UNKNOWN'">Unknown</option>
+						<option selected="selected" value="'VANDALISM'">Vandalism</option>
+						<option selected="selected" value="'WEAPON VIOLATIONS'">Weapon Violations</option>
 					</select>
 				</div>
 				<div class="filter-field">
