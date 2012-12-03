@@ -401,7 +401,7 @@
 								curIcon = unknownIcon;
 							}
 							curMarker = new L.marker([curLat, curLong], {icon: curIcon});
-							curMarker.bindPopup(curPopup.html());
+							curMarker.bindPopup(curPopup.html(),{maxWidth:350});
 							markers.addLayer(curMarker);							
 							
 							if(chartData.hasOwnProperty(this.type)){
@@ -412,6 +412,9 @@
 							}
 						});
 						map.addLayer(markers);
+						if(dataVal == "fake"){
+							$("#fake-warn").dialog({title:"<center>Alert:</center>", height:65});
+						}
 						$.each(chartData, function(name,value){
 							var cur = [name,value];
 							processedChartData.push(cur);
@@ -473,11 +476,8 @@
 		</script>
 	</head>
 	<body>
-		<aside id="fake-warn" class="ui-state-error ui-corner-all" style="width:280px; height:50px; position:absolute; top:10px; z-index:5; left:15%; display:none;">
-			<p style="padding:15px; margin:0; height:100%;">
-				<span class="ui-icon ui-icon-alert" style="float:left; margin-left:5px;"></span>
-				<strong>Alert:</strong> You are currently viewing fake data!
-			</p>
+		<aside id="fake-warn" style="display:none;">
+			<p style="text-align:center; margin:0;">You are currently viewing fake data!</p>
 		</aside>
 		<aside id="controls">
 			<h2 class="filter-toggle">Filter Incident Data</h2>

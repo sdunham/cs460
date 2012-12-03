@@ -24,9 +24,6 @@ ul { margin-left:16px; }
 .filter-toggle, .graph-toggle { cursor:pointer; }
 .filter-toggle::before, .graph-toggle::before { content: "\2191"; font-size:15px; margin-right:5px; vertical-align:text-top; }
 .filter-toggle.shown::before, .graph-toggle.shown::before { content: "\2193"; font-size:15px; margin-right:5px; vertical-align:text-top; }
-/*.graph-toggle { cursor:pointer; }
-.graph-toggle::before { content: "\2193"; font-size:15px; margin-right:5px; vertical-align:text-top; }
-.graph-toggle.shown::before { content: "\2191"; font-size:15px; margin-right:5px; vertical-align:text-top; }*/
 #filters { display:none; }
 .filter-field { width:275px; margin:5px auto; }
 .filter-field > label { float:left; margin-right:10px; font-weight:bold; min-width:75px; text-align:right; }
@@ -51,6 +48,9 @@ input[value="Submit"] { float:right; margin:5px; width:185px; }
 .leaflet-container a.leaflet-popup-close-button:hover { color:#D7AB91; }
 h3.incidentID { text-align:center; font-style:italic; margin:2px; font-size:15px; }
 .popupLabel { display:inline-block; width:55px; margin-right:10px; text-align:right; font-weight:bold; }
+
+/* Dialog CSS */
+.ui-dialog-title { width:100%; margin:0; }
 
 
 
