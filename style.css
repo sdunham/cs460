@@ -24,6 +24,8 @@ ul { margin-left:16px; }
 .filter-toggle, .graph-toggle { cursor:pointer; }
 .filter-toggle::before, .graph-toggle::before { content: "\2191"; font-size:15px; margin-right:5px; vertical-align:text-top; }
 .filter-toggle.shown::before, .graph-toggle.shown::before { content: "\2193"; font-size:15px; margin-right:5px; vertical-align:text-top; }
+.graph-toggle::before { content: "\2193"; }
+.graph-toggle.shown::before { content: "\2191"; }
 #filters { display:none; }
 .filter-field { width:275px; margin:5px auto; }
 .filter-field > label { float:left; margin-right:10px; font-weight:bold; min-width:75px; text-align:right; }
@@ -116,6 +118,8 @@ h3.incidentID { text-align:center; font-style:italic; margin:2px; font-size:15px
 	
 	#controls { bottom:10px; left:10px; border-radius:20px; width:375px; }
 	#vis { top:auto; bottom:10px; left:400px; /*width:auto; min-width:250px;*/ width:300px; border-radius:20px; }
+	.graph-toggle::before { content: "\2191"; }
+	.graph-toggle.shown::before { content: "\2193"; }
 	
 	
 }
