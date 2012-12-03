@@ -444,9 +444,6 @@
 				//Prepare Submit jQuery UI button
 				$("input[value='Submit']").button();
 				
-				//Prepare jQuery UI tooltip for incident type select field
-				$("#incident-select").tooltip();
-				
 				//Add custom info button to map
 				map.addControl(new infoControl());
 				
@@ -519,6 +516,7 @@
 						<option selected="selected" value="'VANDALISM'">Vandalism</option>
 						<option selected="selected" value="'WEAPON VIOLATIONS'">Weapon Violations</option>
 					</select>
+					<p style="width:100%; text-align:right; font-style:italic; font-weight:bold;">ctrl/&#8984; + click to select multiple</p>
 				</div>
 				<div class="filter-field">
 					<input type="submit" value="Submit" id="submitButton">
