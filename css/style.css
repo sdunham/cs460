@@ -43,6 +43,7 @@ input[value="Submit"] { float:right; margin:5px; width:185px; }
 
 /* Zoom control adjustments */
 .leaflet-control-zoom.leaflet-control { margin-top:35px !important; }
+.leaflet-control-zoom a { width:27px; height:27px; }
 
 /* Popup CSS */
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { background:#78824F; background:rgba(120,130,79,0.85); color:white; }
