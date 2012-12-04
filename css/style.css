@@ -39,7 +39,7 @@ input[value="Submit"] { float:right; margin:5px; width:185px; }
 .vis-control-info, .leaflet-control-zoom { background:#78824F; background:rgba(120,130,79,0.85); }
 .vis-control-info { padding:5px; moz-border-radius:7px; -webkit-border-radius:7px; border-radius:7px; }
 .vis-control-info a { width:27px; height:27px; -moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px; background-position:50% 50%; background-repeat:no-repeat; display:block; background-color:rgba(255, 255, 255, 0.75); }
-.vis-control-info a.vis-control-info-button { background-image: url(icons/PNGs/info.png); background-size:27px 27px; }
+.vis-control-info a.vis-control-info-button { background-image: url(../icons/PNGs/info.png); background-size:27px 27px; }
 
 /* Zoom control adjustments */
 .leaflet-control-zoom.leaflet-control { margin-top:35px !important; }
