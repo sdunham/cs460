@@ -79,8 +79,8 @@ else{
 			echo "<td>" . $row['time'] . "</td>";
 			echo "<td>" . $row['type'] . "</td>";
 			echo "<td>" . $row['location'] . "</td>";
-			echo "<td>" . $row['lat'] . "</td>";
-			echo "<td>" . $row['long'] . "</td>";
+			echo "<td>" . $row['latitude'] . "</td>";
+			echo "<td>" . $row['longitude'] . "</td>";
 			echo "</tr>";
 		}
 	}

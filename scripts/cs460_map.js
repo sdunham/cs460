@@ -149,8 +149,8 @@ $(function() {
 			$.each(incidents, function() {
 				var curID, curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
 				curID = this.ID;
-				curLat = this.lat;
-				curLong = this.long;
+				curLat = this.latitude;
+				curLong = this.longitude;
 				curType = this.type;
 				curDate = this.date;
 				curTime = this.time;

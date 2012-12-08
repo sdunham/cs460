@@ -23,7 +23,7 @@ if($num_records > 0){
 		$type = assignType($type);//Replace type number with correct string
 		$latitude = $lat_prefix . "." . mt_rand(257461,265470); //All campus location latitudes are between these two numbers
 		$longitude = $long_prefix . "." . mt_rand(477753,484105); //All campus location longitudes are between these two numbers
-		if (!$mysqli->query("INSERT INTO incidents_fake(added,id,date,time,type,latitude,longitude) VALUES(DEFAULT,DEFAULT,CURRENT_DATE,'" . $hour . ":" . $minute . ":00','" . $type . "'," . $latitude . "," . $longitude .");")) {
+		if (!$mysqli->query("INSERT INTO incidents_fake(added,id,date,time,type,location,latitude,longitude) VALUES(DEFAULT,DEFAULT,CURRENT_DATE,'" . $hour . ":" . $minute . ":00','" . $type . "',DEFAULT," . $latitude . "," . $longitude .");")) {
 			//Return an error message if this query fails
 			echo "Record insertion failed: (" . $mysqli->errno . ") " . $mysqli->error . "<br />";
 			$email_message = $email_message . "Record insertion failed: (" . $mysqli->errno . ") " . $mysqli->error . "\n"; //Add error to email string
