@@ -280,13 +280,14 @@ $(function() {
 
 	//Bind click event to filter toggle
 	$(".filter-toggle").click(function(){
-		$("#filters").slideToggle();
-		$(this).toggleClass("shown");
+		$("#filters").slideToggle(function(){
+			$(".filter-toggle").toggleClass("shown");
+		});
 	});
 	
 	//Bind click event to filter toggle
 	$(".graph-toggle").click(function(){
-		$("#vis-content").toggle("fast", function(){
+		$("#vis-content").slideToggle(function(){
 			$(".graph-toggle").toggleClass("shown");
 			genChart(processedChartData);
 		});
