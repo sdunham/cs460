@@ -17,7 +17,7 @@ if($num_records > 0){
 	echo "Creating " . $num_records . " records!<br />";
 	$email_message = "Creating " . $num_records . " records!\n"; //Begin creating string for email message
 	for($i = 0; $i < $num_records; $i++){
-		$hour = rand(0,24); //Hour this incident occured, 24-hour format
+		$hour = rand(0,23); //Hour this incident occured, 24-hour format
 		$minute = rand(0,59); //Minute this incident occured
 		$type = rand(1,14); //Incident type number, to be used by assignType function
 		$type = assignType($type);//Replace type number with correct string
@@ -55,7 +55,7 @@ function assignType($num){
 			$ret = "Burglary";
 			break;
 		case 3:
-			$ret = "Murder/Non-Negligent Manslaughter";
+			$ret = "Murder / Non-Negligent Manslaughter";
 			break;
 		case 4:
 			$ret = "Negligent Manslaughter";
@@ -92,6 +92,6 @@ function assignType($num){
 			break;
 		
 	}
-	return $ret;
+	return strtoupper($ret);
 }
 ?>

@@ -18,7 +18,9 @@ ul { margin-left:16px; }
 #map { z-index:1; }
 #vis, #controls { position:absolute; z-index:2; background:#78824F; background:rgba(120,130,79,0.85); box-shadow:0 0 20px black; color:#fff; }
 #vis { top:0; width:100%; }
-#graph { min-height:250px; display:none; }
+#vis-content p { font-weight:bold; font-style:italic; text-align:center; }
+#vis-content { display:none; }
+#graph { min-height:250px; }
 #controls { width:100%; bottom:0; left:0; }
 #controls h2, #vis h2 { text-align:center; font-style:italic; margin:2px; text-shadow:2px 3px 10px #333; }
 .filter-toggle, .graph-toggle { cursor:pointer; }

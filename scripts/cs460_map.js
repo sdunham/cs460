@@ -144,6 +144,7 @@ $(function() {
 		}).done(function(data) {
 			//When JSON returned, clear the current markers from the map and iterate through each incident
 			var incidents = jQuery.makeArray(data.incidents);
+			var incidentCount = incidents.length;
 			if(typeof markers !== "undefined"){markers.clearLayers();}
 			markers = new L.MarkerClusterGroup();
 			$.each(incidents, function() {
@@ -239,6 +240,8 @@ $(function() {
 			});
 			//Redraw the chart based on the new data
 			genChart(processedChartData);
+			//Update the total incident count listed about the chart
+			$("#incidentCount").text(incidentCount);
 		});
 	};
 	
@@ -272,7 +275,7 @@ $(function() {
 	
 	//Bind click event to filter toggle
 	$(".graph-toggle").click(function(){
-		$("#graph").toggle("fast", function(){
+		$("#vis-content").toggle("fast", function(){
 			$(".graph-toggle").toggleClass("shown");
 			genChart(processedChartData);
 		});
