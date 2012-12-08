@@ -1,5 +1,6 @@
 <?php
 $num_records = rand(0,15); //Number of records to create today
+$cur_date = date("Y-m-d"); //Today's date, to be used in the resulting email subject line
 if($num_records > 0){
 	//Open connection to MySQL database
 	$mysqli = new mysqli("localhost", "sdunham_cs460", "G00dluck", "sdunham_cs460");
@@ -37,7 +38,6 @@ if($num_records > 0){
 	//Close the connection to the database
 	mysqli_close($mysqli);
 	//Send results to email
-	$cur_date = date("Y-m-d");
 	$email = mail("dunham.scott@gmail.com","Fake Incidents Created on " . $cur_date,$email_message);
 }
 else{
@@ -92,6 +92,6 @@ function assignType($num){
 			break;
 		
 	}
-	return strtoupper($ret);
+	return strtoupper($ret); //Real incident types are upper case. Return upper case version of fake type to be consistent
 }
 ?>

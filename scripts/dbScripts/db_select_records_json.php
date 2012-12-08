@@ -1,15 +1,10 @@
 <?php
-//echo "<p><a href='http://dnhmsctt.com/cs460/'>Run another query!</a></p>";
-
 //Open connection to MySQL database
 $mysqli = new mysqli("localhost", "sdunham_cs460", "G00dluck", "sdunham_cs460");
 if ($mysqli->connect_errno) {
 	//Return error message if connection fails
-	//echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error . "<br />";
-}
-else{
-	//Return successful connection message otherwise
-	//echo "Successfully connected to MySQL: " . $mysqli->host_info . "<br />";
+	header("HTTP/1.1 559 Error connecting to database");
+	exit();
 }
 
 //Declare empty array to hold WHERE clause statements
@@ -32,11 +27,6 @@ if(!empty($_POST["type"])){
 	$whereArr["type"] = "type IN (" . $typeVals . ")";
 }
 
-/*if(!empty($_POST["loc"])){
-	$locVals = implode(",",$_POST["loc"]);
-	$whereArr["loc"] = "location IN (" . $locVals . ")";
-}*/
-
 //Empty string to hold the WHERE clause to be used in this SQL statement
 $where = "";
 //If any WHERE clause statements were generated, concatenate them into a single WHERE clause
@@ -48,23 +38,16 @@ if(!empty($whereArr)){
 	$where = substr($where,0,-3); //Remove trailing "AND" from the string
 }
 
-if($where != ""){
-	//echo "Selecting records which meet the following criteria:<br />" . $where . "<br />";
-}
-else{
-	//echo "No criteria provided, selecting all records...<br />";
-}
-
 //Determine the name of the table to be queried, based on user input
 $tableName = "incidents_" . $_POST["data"];
-//echo "Selecting records from database: " . $tableName . "<br />";
 
 //Assemble SQL SELECT statement, including user-specified WHERE clause and table name
 $sql = "SELECT * FROM " . $tableName . " " . $where . "ORDER BY date DESC";
 
 if (!$res = $mysqli->query($sql)) {
 	//Return an error message if the query failed
-	//echo "SELECT failed: (" . $mysqli->errno . ") " . $mysqli->error . "<br />";
+	header("HTTP/1.1 559 Error executing specified query");
+	exit();
 }
 else{
 	//Generate a JSON file containing the resulting data

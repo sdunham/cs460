@@ -111,15 +111,119 @@ $(function() {
 	// create a map in the "map" div, set the view to a given place and zoom
 	var map = L.map('map').setView([47.261743,-122.481775], 16);
 	var markers; //Global variable to hold the markers
+	var dataVal, beginDateVal, endDateVal, beginTimeVal, endTimeVal, typeVals; //Global variables to hold filter values
 	
 	// add a CloudMade tile layer with style #997
 	L.tileLayer('http://{s}.tile.cloudmade.com/eac20f969c234bed8c6e3191bbac3bfc/997/256/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>'
 	}).addTo(map);
 	
+	//Function which processes data which has been fetched by genIncidentMarkers
+	var processIncidents = function(data){
+		//When JSON returned, clear the current markers from the map and iterate through each incident
+		var incidents = jQuery.makeArray(data.incidents);
+		var incidentCount = incidents.length;
+		if(typeof markers !== "undefined"){markers.clearLayers();}
+		markers = new L.MarkerClusterGroup();
+		$.each(incidents, function() {
+			var curID, curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
+			curID = this.ID;
+			curLat = this.latitude;
+			curLong = this.longitude;
+			curType = this.type;
+			curDate = this.date;
+			curTime = this.time;
+			curLoc = this.location;
+			curPopup = $(incidentPopupTemplate); //Create an empty popup template to manipulate
+			curPopup.find(".incidentID").append(curID);
+			curPopup.find(".popupType").html(curType);
+			curPopup.find(".popupLoc").html(curLoc);
+			curPopup.find(".popupDate").html(curDate);
+			curPopup.find(".popupTime").html(curTime);
+			//Assign icon based on current incident's type
+			switch(curType.toUpperCase()){
+				case "AGGRAVATED ASSAULT":
+				curIcon = assaultIcon;
+				break;
+				case "BURGLARY":
+				curIcon = burglaryIcon;
+				break;
+				case "MURDER / NON-NEGLIGENT MANSLAUGHTER":
+				curIcon = murderIcon;
+				break;
+				case "NEGLIGENT MANSLAUGHTER":
+				curIcon = manslaughterIcon;
+				break;
+				case "MOTOR VEHICLE THEFT":
+				curIcon = carTheftIcon;
+				break;
+				case "ROBBERY":
+				curIcon = robberyIcon;
+				break;
+				case "SEX OFFENSE - NON-FORCIBLE":
+				curIcon = sexOffenseIcon;
+				break;
+				case "SEX OFFENSE - FORCIBLE":
+				curIcon = sexOffenseIcon;
+				break;
+				case "LIQUOR LAW VIOLATIONS":
+				curIcon = liquorIcon;
+				break;
+				case "DRUG ABUSE VIOLATIONS":
+				curIcon = drugIcon;
+				break;
+				case "WEAPON VIOLATIONS":
+				curIcon = weaponIcon;
+				break;
+				case "THEFT":
+				curIcon = theftIcon;
+				break;
+				case "ATTEMPTED CRIME":
+				curIcon = attemptedCrimeIcon;
+				break;
+				case "VANDALISM":
+				curIcon = vandalismIcon;
+				break;
+				default:
+				curIcon = unknownIcon;
+			}
+			curMarker = new L.marker([curLat, curLong], {icon: curIcon});
+			curMarker.bindPopup(curPopup.html(),{maxWidth:350});
+			markers.addLayer(curMarker);							
+			
+			//Increment the count for this incident type in the chartData object
+			if(chartData.hasOwnProperty(this.type)){
+				chartData[this.type] += 1;
+			}
+			else{
+				chartData[this.type] = 1;
+			}
+		});
+		//Add the newly created markers to the map
+		map.addLayer(markers);
+		//Show a "Fake Data" warning dialog if the user requested fake data 
+		if(dataVal == "fake"){
+			$("#fake-warn").dialog({title:"<center>Alert:</center>", height:65});
+		}
+		//Process the chart data for use in a Google pie chart (expects 2d array)
+		$.each(chartData, function(name,value){
+			var cur = [name,value];
+			processedChartData.push(cur);
+		});
+		//Sort processed data alphabetically by incident type
+		processedChartData.sort(function(a,b){
+			if (a[0] < b[0]){return -1;}
+			else if (a[0] > b[0]){return 1;}
+			else{return 0;}
+		});
+		//Redraw the chart based on the new data
+		genChart(processedChartData);
+		//Update the total incident count listed about the chart
+		$("#incidentCount").text(incidentCount);
+	};
+	
 	//Function which queries the database based on current filter selections
 	var genIncidentMarkers = function(){
-		var dataVal, beginDateVal, endDateVal, beginTimeVal, endTimeVal, typeVals;
 		//Get current filter field values
 		dataVal = $("input:radio[name='data']:checked").val();
 		beginDateVal = $("input[name='datepicker-start']").val();
@@ -140,108 +244,15 @@ $(function() {
 				beginTime: beginTimeVal,
 				endTime: endTimeVal,
 				type: typeVals
+			},
+			success: function (response) {
+				//If the AJAX call returned successfully, proces the resulting incident data
+				processIncidents(response);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				//If the AJAX call returned an error, alert the user
+				alert(thrownError);
 			}
-		}).done(function(data) {
-			//When JSON returned, clear the current markers from the map and iterate through each incident
-			var incidents = jQuery.makeArray(data.incidents);
-			var incidentCount = incidents.length;
-			if(typeof markers !== "undefined"){markers.clearLayers();}
-			markers = new L.MarkerClusterGroup();
-			$.each(incidents, function() {
-				var curID, curLat, curLong, curType, curDate, curTime, curLoc, curMarker, curPopup, curIcon;
-				curID = this.ID;
-				curLat = this.latitude;
-				curLong = this.longitude;
-				curType = this.type;
-				curDate = this.date;
-				curTime = this.time;
-				curLoc = this.location;
-				curPopup = $(incidentPopupTemplate); //Create an empty popup template to manipulate
-				curPopup.find(".incidentID").append(curID);
-				curPopup.find(".popupType").html(curType);
-				curPopup.find(".popupLoc").html(curLoc);
-				curPopup.find(".popupDate").html(curDate);
-				curPopup.find(".popupTime").html(curTime);
-				//Assign icon based on current incident's type
-				switch(curType.toUpperCase()){
-					case "AGGRAVATED ASSAULT":
-					curIcon = assaultIcon;
-					break;
-					case "BURGLARY":
-					curIcon = burglaryIcon;
-					break;
-					case "MURDER / NON-NEGLIGENT MANSLAUGHTER":
-					curIcon = murderIcon;
-					break;
-					case "NEGLIGENT MANSLAUGHTER":
-					curIcon = manslaughterIcon;
-					break;
-					case "MOTOR VEHICLE THEFT":
-					curIcon = carTheftIcon;
-					break;
-					case "ROBBERY":
-					curIcon = robberyIcon;
-					break;
-					case "SEX OFFENSE - NON-FORCIBLE":
-					curIcon = sexOffenseIcon;
-					break;
-					case "SEX OFFENSE - FORCIBLE":
-					curIcon = sexOffenseIcon;
-					break;
-					case "LIQUOR LAW VIOLATIONS":
-					curIcon = liquorIcon;
-					break;
-					case "DRUG ABUSE VIOLATIONS":
-					curIcon = drugIcon;
-					break;
-					case "WEAPON VIOLATIONS":
-					curIcon = weaponIcon;
-					break;
-					case "THEFT":
-					curIcon = theftIcon;
-					break;
-					case "ATTEMPTED CRIME":
-					curIcon = attemptedCrimeIcon;
-					break;
-					case "VANDALISM":
-					curIcon = vandalismIcon;
-					break;
-					default:
-					curIcon = unknownIcon;
-				}
-				curMarker = new L.marker([curLat, curLong], {icon: curIcon});
-				curMarker.bindPopup(curPopup.html(),{maxWidth:350});
-				markers.addLayer(curMarker);							
-				
-				//Increment the count for this incident type in the chartData object
-				if(chartData.hasOwnProperty(this.type)){
-					chartData[this.type] += 1;
-				}
-				else{
-					chartData[this.type] = 1;
-				}
-			});
-			//Add the newly created markers to the map
-			map.addLayer(markers);
-			//Show a "Fake Data" warning dialog if the user requested fake data 
-			if(dataVal == "fake"){
-				$("#fake-warn").dialog({title:"<center>Alert:</center>", height:65});
-			}
-			//Process the chart data for use in a Google pie chart (expects 2d array)
-			$.each(chartData, function(name,value){
-				var cur = [name,value];
-				processedChartData.push(cur);
-			});
-			//Sort processed data alphabetically by incident type
-			processedChartData.sort(function(a,b){
-				if (a[0] < b[0]){return -1;}
-				else if (a[0] > b[0]){return 1;}
-				else{return 0;}
-			});
-			//Redraw the chart based on the new data
-			genChart(processedChartData);
-			//Update the total incident count listed about the chart
-			$("#incidentCount").text(incidentCount);
 		});
 	};
 	
