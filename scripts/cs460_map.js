@@ -23,25 +23,10 @@ var attemptedCrimeIcon = new IncidentIcon({iconUrl: 'icons/PNGs/arrest.png'});
 var manslaughterIcon = new IncidentIcon({iconUrl: 'icons/PNGs/manslaughter.png', iconAnchor: [30.5, 20]});
 var unknownIcon = new IncidentIcon({iconUrl: 'icons/PNGs/unknown.png'});
 
-/*var liquorIcon = new IncidentIcon({iconUrl: 'icons/PNGs/liquor.png', iconAnchor: [25.5, 20]});
-var robberyIcon = new IncidentIcon({iconUrl: 'icons/PNGs/robbery.png', iconAnchor: [33.5, 24]});
-var assaultIcon = new IncidentIcon({iconUrl: 'icons/PNGs/assault.png', iconAnchor: [10.5, 20]});
-var burglaryIcon = new IncidentIcon({iconUrl: 'icons/PNGs/burglary.png', iconAnchor: [24.5, 18]});
-var murderIcon = new IncidentIcon({iconUrl: 'icons/PNGs/murder.png', iconAnchor: [24.5, 20]});
-var carTheftIcon = new IncidentIcon({iconUrl: 'icons/PNGs/car.png', iconAnchor: [17.5, 20]});
-var drugIcon = new IncidentIcon({iconUrl: 'icons/PNGs/drugs.png', iconAnchor: [34.5, 20]});
-var weaponIcon = new IncidentIcon({iconUrl: 'icons/PNGs/gun.png', iconAnchor: [17.5, 17]});
-var theftIcon = new IncidentIcon({iconUrl: 'icons/PNGs/pickpocket.png', iconAnchor: [32.5, 27]});
-var vandalismIcon = new IncidentIcon({iconUrl: 'icons/PNGs/vandalism.png'});
-var sexOffenseIcon = new IncidentIcon({iconUrl: 'icons/PNGs/sexoffense.png', iconAnchor: [20.5, 35]});
-var attemptedCrimeIcon = new IncidentIcon({iconUrl: 'icons/PNGs/arrest.png', iconAnchor: [20.5, 8]});
-var manslaughterIcon = new IncidentIcon({iconUrl: 'icons/PNGs/manslaughter.png', iconAnchor: [32.5, 22]});
-var unknownIcon = new IncidentIcon({iconUrl: 'icons/PNGs/unknown.png'});*/
-
 //Generic HTML template used to create each popup
 var incidentPopupTemplate = "<div><h3 class='incidentID'>Incident # </h3><div class='popupField'><span class='popupLabel'>Type:</span><span class='popupType'></span></div><div class='popupField'><span class='popupLabel'>Location:</span><span class='popupLoc'></span></div><div class='popupField'><span class='popupLabel'>Date:</span><span class='popupDate'></span></div><div class='popupField'><span class='popupLabel'>Time:</span><span class='popupTime'></span></div></div>";
 
-//Function to reset the chart data, to be used when querying the database
+//Function to reset the chart data, to be used before querying the database
 var resetData = function(){
 	var newObj = {
 		"AGGRAVATED ASSAULT":0,
@@ -245,11 +230,11 @@ $(function() {
 				endTime: endTimeVal,
 				type: typeVals
 			},
-			success: function (response) {
+			success: function(response){
 				//If the AJAX call returned successfully, proces the resulting incident data
 				processIncidents(response);
 			},
-			error: function (xhr, ajaxOptions, thrownError) {
+			error: function(xhr, ajaxOptions, thrownError){
 				//If the AJAX call returned an error, alert the user
 				alert(thrownError);
 			}
