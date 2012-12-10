@@ -1,4 +1,10 @@
 <?php
+/**
+ * This script queries the project MySQL database using WHERE clause values specified by a user. It converts the
+ * resulting data to JSON before returning it to the visualization. If an error occurs when connecting to or querying
+ * the database, it returns an error message.
+ */
+
 //Open connection to MySQL database
 $mysqli = new mysqli("localhost", "sdunham_cs460", "G00dluck", "sdunham_cs460");
 if ($mysqli->connect_errno) {

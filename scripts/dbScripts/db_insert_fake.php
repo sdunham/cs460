@@ -1,4 +1,10 @@
 <?php
+/**
+ * This script generates between 0 and 15 random incidents and inserts them into the project's MySQL database.
+ * For each incident, a random time, type, latitude, and longitude is chosen. Once the appropriate records
+ * have been inserted, the script sends an email with details for each record which was created.
+ */
+
 $num_records = rand(0,15); //Number of records to create today
 $cur_date = date("Y-m-d"); //Today's date, to be used in the resulting email subject line
 if($num_records > 0){

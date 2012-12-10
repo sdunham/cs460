@@ -1,12 +1,10 @@
 /******************************************************************
-Site Name:
-Author:
+Site Name: http://dnhmsctt.com/cs460
+Author: Scott Dunham
 
 Stylesheet: Base Mobile Stylesheet
 
-Be light and don't over style since everything here will be
-loaded by mobile devices. You want to keep it as minimal as
-possible. This is called at the top of the main stylsheet
+This is called at the top of the main stylsheet
 and will be used across all viewports.
 
 ******************************************************************/
@@ -58,64 +56,15 @@ h3.incidentID { text-align:center; font-style:italic; margin:2px; font-size:15px
 .ui-dialog-title { width:100%; margin:0; }
 
 
-
-
-@media only screen and (min-width: 481px) {
-	/******************************************************************
-	Site Name: 
-	Author: 
-
-	Stylesheet: 481px and Up Stylesheet
-
-	This stylesheet is loaded for larger devices. It's set to 
-	481px because at 480px it would load on a landscaped iPhone.
-	This isn't ideal because then you would be loading all those
-	extra styles on that same mobile connection. 
-
-	A word of warning. This size COULD be a larger mobile device,
-	so you still want to keep it pretty light and simply expand
-	upon your base.less styles.
-
-	******************************************************************/
-  
-}
-
-
-
-
-
-
-
-@media only screen and (min-width: 768px) {
-	/******************************************************************
-	Site Name:
-	Author:
-
-	Stylesheet: Tablet & Small Desktop Stylesheet
-
-	Here's where you can start getting into the good stuff.
-	This size will work on iPads, other tablets, and desktops.
-	So you can start working with more styles, background images,
-	and other resources. You'll also notice the grid starts to
-	come into play. Have fun!
-
-	******************************************************************/
-	
-	
-
-}
-
-
-
 @media only screen and (min-width: 1030px) {
 	/******************************************************************
-	Site Name: 
-	Author: 
+	Site Name: http://dnhmsctt.com/cs460
+	Author: Scott DUnham
 
 	Stylesheet: Desktop Stylsheet
 
 	This is the desktop size. It's larger than an iPad so it will only
-	be seen on the Desktop. 
+	be seen on the Desktop.
 
 	******************************************************************/
 	
@@ -123,6 +72,4 @@ h3.incidentID { text-align:center; font-style:italic; margin:2px; font-size:15px
 	#vis { top:auto; bottom:10px; left:400px; /*width:auto; min-width:250px;*/ width:300px; border-radius:20px; }
 	.graph-toggle::before { content: "\2191"; }
 	.graph-toggle.shown::before { content: "\2193"; }
-	
-	
 }

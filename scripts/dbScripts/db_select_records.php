@@ -1,4 +1,9 @@
 <?php
+/**
+ * This is a legacy version of the select script, used by queryDemo.html. It returns query results as an HTML table
+ * based on selection criteria provided by the user.
+ */
+
 echo "<p><a href='http://dnhmsctt.com/cs460/'>Run another query!</a></p>";
 
 //Open connection to MySQL database
@@ -69,34 +74,17 @@ else{
 	//Generate a table with the resulting data
 	echo "Selected " . $res->num_rows . " rows<br />";
 	echo "<table border='1'>";
-	//The table containing the real data includes a location description, so the table will include a column to hold this data
-	if($_POST["data"] == "real"){
-		echo "<tr><td>ID</td><td>Date</td><td>Time</td><td>Type</td><td>Location</td><td>Latitude</td><td>Longitude</td></tr>";
-		while ($row = $res->fetch_assoc()) {
-			echo "<tr>";
-			echo "<td>" . $row['ID'] . "</td>";
-			echo "<td>" . $row['date'] . "</td>";
-			echo "<td>" . $row['time'] . "</td>";
-			echo "<td>" . $row['type'] . "</td>";
-			echo "<td>" . $row['location'] . "</td>";
-			echo "<td>" . $row['latitude'] . "</td>";
-			echo "<td>" . $row['longitude'] . "</td>";
-			echo "</tr>";
-		}
-	}
-	//The table containing the fake data doesn't include a location description, so the table won't display one
-	else{
-		echo "<tr><td>ID</td><td>Date</td><td>Time</td><td>Type</td><td>Latitude</td><td>Longitude</td></tr>";
-		while ($row = $res->fetch_assoc()) {
-			echo "<tr>";
-			echo "<td>" . $row['id'] . "</td>";
-			echo "<td>" . $row['date'] . "</td>";
-			echo "<td>" . $row['time'] . "</td>";
-			echo "<td>" . $row['type'] . "</td>";
-			echo "<td>" . $row['latitude'] . "</td>";
-			echo "<td>" . $row['longitude'] . "</td>";
-			echo "</tr>";
-		}
+	echo "<tr><td>ID</td><td>Date</td><td>Time</td><td>Type</td><td>Location</td><td>Latitude</td><td>Longitude</td></tr>";
+	while ($row = $res->fetch_assoc()) {
+		echo "<tr>";
+		echo "<td>" . $row['ID'] . "</td>";
+		echo "<td>" . $row['date'] . "</td>";
+		echo "<td>" . $row['time'] . "</td>";
+		echo "<td>" . $row['type'] . "</td>";
+		echo "<td>" . $row['location'] . "</td>";
+		echo "<td>" . $row['latitude'] . "</td>";
+		echo "<td>" . $row['longitude'] . "</td>";
+		echo "</tr>";
 	}
 	
 	echo "</table>";
